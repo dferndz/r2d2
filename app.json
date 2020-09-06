@@ -12,7 +12,7 @@
   "env": {
     "BOT_TOKEN": {
       "description": "Your discord bot token.",
-    },
+    }
   },
   "image": "heroku/python",
   "buildpacks": [

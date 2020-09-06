@@ -8,7 +8,7 @@
   ],
   "website": "https://github.com/dferndz/r2d2",
   "repository": "https://github.com/dferndz/r2d2",
-  "logo": "https://github.com/dferndz/r2d2/r2d2.jpg",
+  "logo": "https://github.com/dferndz/r2d2/blob/master/r2d2.jpg?raw=true",
   "env": {
     "BOT_TOKEN": {
       "description": "Your discord bot token."

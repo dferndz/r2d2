@@ -17,6 +17,8 @@ class Basic(Cog):
 
     @Cog.listener()
     async def on_message(self, message):
+        if self.bot.user in message.mentions:
+            await message.channel.send("Hey there!")
         if message.author == self.bot.user:
             log("Bot sent response")
         else:

@@ -1,10 +1,16 @@
 import random
+import os
 from typing import List
 
 from discord.ext.commands import Cog, command, CommandNotFound
 from discord.ext.commands.context import Context
 from discord.member import Member
 from discord.guild import Guild
+from discord.channel import TextChannel
+from discord.invite import Invite
+from discord.utils import oauth_url
+from discord.permissions import Permissions
+from discord.ext.commands.bot import Bot
 
 from exceptions import (
     BaseUserError,
@@ -45,11 +51,40 @@ class Basic(BaseCog):
         else:
             log_msg(message)
 
-    @command(aliases=["h"])
+    @command(aliases=["h"], brief="display this help message")
     async def help(self, ctx: Context):
         await send_help(ctx, self)
 
-    @command()
+    @command(brief="share r2d2 to a server")
+    async def r2d2(self, ctx: Context):
+        if "CLIENT_ID" in os.environ:
+            client_id = os.environ["CLIENT_ID"]
+            permission = Permissions(administrator=True)
+            link = oauth_url(client_id, permissions=permission)
+            await ctx.send(f"Share me! {link}")
+
+
+    @command(aliases=["invites"], brief="invite url for this server")
+    async def invite(self, ctx: Context):
+        if not ctx.guild:
+            raise OutOfServer()
+        guild: Guild = ctx.guild
+        author: Member = ctx.author
+        if not author.guild_permissions.create_instant_invite:
+            raise PermissionDenied()
+
+        server_invites: List[Invite] = await guild.invites()
+
+        for invite in server_invites:
+            if invite.inviter == self.bot.user and invite.max_age == 0:
+                await ctx.send(invite.url)
+                return
+
+        channel: TextChannel = ctx.channel
+        invite: Invite = await channel.create_invite()
+        await ctx.send(invite.url)
+
+    @command(brief="mention @everyone")
     async def all(self, ctx: Context):
         if not ctx.guild:
             raise OutOfServer()
@@ -85,7 +120,7 @@ class Greetings(BaseCog):
 
 
 class Misc(BaseCog):
-    @command(name="8ball")
+    @command(name="8ball", brief="ask a question, get a prediction")
     async def _8ball(self, ctx: Context, *args):
         if args:
             await ctx.send(random.choice(QUESTION_RESPONSES))

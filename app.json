@@ -12,6 +12,9 @@
   "env": {
     "BOT_TOKEN": {
       "description": "Your discord bot token."
+    },
+    "CLIENT_ID": {
+      "description": "Your application client id."
     }
   },
   "image": "heroku/python",

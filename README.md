@@ -21,4 +21,17 @@ Roles:
 
 ## Deploy your own
 
+Create a discord [application](https://discordpy.readthedocs.io/en/latest/discord.html). <br />
+Create a [heroku](https://heroku.com) account. <br />
+
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/dferndz/r2d2)
+
+## Run locally
+
+Clone the repo. <br />
+Install requirements.txt ```pip install -r requirements.txt``` <br /><br />
+Add env variables:
+```
+export BOT_TOKEN=your_discord_bot_token
+```
+Run ```python main.py```

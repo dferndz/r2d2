@@ -1,0 +1,23 @@
+{
+  "name": "R2D2_BOT",
+  "description": "Discord bot.",
+  "keywords": [
+    "bot",
+    "discord",
+    "python"
+  ],
+  "website": "https://github.com/dferndz/r2d2",
+  "repository": "https://github.com/dferndz/r2d2",
+  "logo": "https://github.com/dferndz/r2d2/r2d2.jpg",
+  "env": {
+    "BOT_TOKEN": {
+      "description": "Your discord bot token.",
+    },
+  },
+  "image": "heroku/python",
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}

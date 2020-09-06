@@ -105,14 +105,19 @@ class Roles(Cog):
             await ctx.send("You must call this command from a server.")
             return
 
-        roles = filter(lambda x: not x.is_default() and not x.permissions.administrator, server.roles)
+        roles = filter(
+            lambda x: not x.is_default() and not x.permissions.administrator,
+            server.roles,
+        )
 
         if role:
             for r in roles:
                 if r.name == role:
                     if r in ctx.author.roles:
                         await ctx.author.remove_roles(r)
-                        await ctx.author.send(f"Removed the role {r.name} at {ctx.guild}")
+                        await ctx.author.send(
+                            f"Removed the role {r.name} at {ctx.guild}"
+                        )
                     else:
                         await ctx.author.add_roles(r)
                         await ctx.author.send(f"Added the role {r.name} at {ctx.guild}")

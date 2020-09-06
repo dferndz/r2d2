@@ -2,7 +2,6 @@
 ![img](https://img.shields.io/badge/discord-bot-blueviolet?style=for-the-badge&logo=discord)
 ![img](https://img.shields.io/badge/code-python-blue?style=for-the-badge&logo=python)
 ![img](https://img.shields.io/badge/code_style-black-black?style=for-the-badge)
-
 <br /><br />
 R2D2 is a [Discord](https://discord.com/) bot.
 

@@ -5,19 +5,27 @@ from exceptions import (
     BaseUserError,
     OutOfServer,
     InvalidArgs,
+    PermissionDenied,
     COMMAND_NOT_FOUND_RESPONSE,
     INTERNAL_ERROR_RESPONSE,
 )
-from tools import send_help, filter_public_roles, list_roles, find_role
+from tools import send_help, filter_public_roles, list_roles, find_role, mention_admin
 from logger import log, log_msg
 from constants import QUESTION_RESPONSES
 
 
-class Basic(Cog):
+class BaseCog(Cog):
+    admin = False
+
     def __init__(self, bot):
         self.bot = bot
-        self.bot.remove_command("help")
         self._last_member = None
+
+
+class Basic(BaseCog):
+    def __init__(self, bot):
+        super().__init__(bot)
+        self.bot.remove_command("help")
 
     @Cog.listener()
     async def on_ready(self):
@@ -36,6 +44,14 @@ class Basic(Cog):
     async def help(self, ctx):
         await send_help(ctx, self)
 
+    @command()
+    async def all(self, ctx):
+        if not ctx.guild:
+            raise OutOfServer()
+        if not ctx.author.guild_permissions.mention_everyone:
+            raise PermissionDenied()
+        await ctx.send(ctx.guild.default_role)
+
     @Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, CommandNotFound):
@@ -46,14 +62,11 @@ class Basic(Cog):
             else:
                 await ctx.send(error.message)
         else:
-            await ctx.send(INTERNAL_ERROR_RESPONSE)
+            log(error)
+            await ctx.send(mention_admin(ctx, INTERNAL_ERROR_RESPONSE))
 
 
-class Greetings(Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self._last_member = None
-
+class Greetings(BaseCog):
     @Cog.listener()
     async def on_member_join(self, member):
         print(f"{member} has joined the server.")
@@ -63,11 +76,7 @@ class Greetings(Cog):
         print(f"{member} has left the server.")
 
 
-class Misc(Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self._last_member = None
-
+class Misc(BaseCog):
     @command(name="8ball")
     async def _8ball(self, ctx, *args):
         if args:
@@ -80,11 +89,7 @@ class Misc(Cog):
         await ctx.send(f"Pong! Latency: {round(self.bot.latency * 1000)} ms")
 
 
-class Roles(Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self._last_member = None
-
+class Roles(BaseCog):
     @command(brief="list, add or remove roles", aliases=["role"])
     async def roles(self, ctx, role_name=None):
         server = ctx.guild

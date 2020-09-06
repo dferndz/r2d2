@@ -5,7 +5,10 @@ async def send_help(ctx, cog):
     message = "```"
     for name in cog.bot.cogs:
         if cog.bot.cogs[name].get_commands():
-            message += f"{name}: \n"
+            message += f"{name}"
+            if cog.bot.cogs[name].admin:
+                message += " (admin only)"
+            message += ":\n"
             for c in cog.bot.cogs[name].get_commands():
                 brief = ""
                 if c.brief:
@@ -36,3 +39,22 @@ def find_role(role, roles, raise_exception=False):
     if raise_exception:
         raise InvalidArgs(f"I couldn't find the role {role}", private=True)
     return None
+
+
+def find_member(name, members, raise_exception=False):
+    for m in members:
+        if str(m) == name:
+            return m
+    if raise_exception:
+        raise InvalidArgs(f"I couldn't find the member {name}")
+    return None
+
+
+def mention_admin(ctx, message):
+    server = ctx.guild
+    if not server:
+        return message
+
+    roles = server.roles
+
+    return f"{message} {roles[len(roles)-1].mention}"

@@ -4,7 +4,7 @@ from discord.ext.commands import CommandError
 COMMAND_NOT_FOUND_RESPONSE = (
     "Hmm, I don't know what that means. Type '.help' to get a list of commands."
 )
-INTERNAL_ERROR_RESPONSE = "Something went wrong. Contact an admin."
+INTERNAL_ERROR_RESPONSE = "Something went wrong."
 
 
 class BaseUserError(CommandError):
@@ -22,5 +22,11 @@ class OutOfServer(BaseUserError):
 
 class InvalidArgs(BaseUserError):
     def __init__(self, message="Missing arguments.", **kwargs):
+        self.message = message
+        super().__init__(self.message, **kwargs)
+
+
+class PermissionDenied(BaseUserError):
+    def __init__(self, message="Permission denied.", **kwargs):
         self.message = message
         super().__init__(self.message, **kwargs)

@@ -55,4 +55,3 @@ class Members(BaseCog):
 
         await ctx.guild.create_role(name=role)
         await ctx.send(f"Created role {role}")
-

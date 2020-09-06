@@ -63,7 +63,6 @@ class Basic(BaseCog):
             link = oauth_url(client_id, permissions=permission)
             await ctx.send(f"Share me! {link}")
 
-
     @command(aliases=["invites"], brief="invite url for this server")
     async def invite(self, ctx: Context):
         if not ctx.guild:

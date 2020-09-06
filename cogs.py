@@ -1,8 +1,16 @@
 import random
 from discord.ext.commands import Cog, command, CommandNotFound
 
-from tools import send_help
+from exceptions import (
+    BaseUserError,
+    OutOfServer,
+    InvalidArgs,
+    COMMAND_NOT_FOUND_RESPONSE,
+    INTERNAL_ERROR_RESPONSE,
+)
+from tools import send_help, filter_public_roles, list_roles, find_role
 from logger import log, log_msg
+from constants import QUESTION_RESPONSES
 
 
 class Basic(Cog):
@@ -24,19 +32,21 @@ class Basic(Cog):
         else:
             log_msg(message)
 
-    @command()
+    @command(aliases=["h"])
     async def help(self, ctx):
         await send_help(ctx, self)
 
     @Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, CommandNotFound):
-            log(f"{ctx.author} -> Command not found")
-            await ctx.send(
-                "Hmm, I don't know what that means. Type '.help' to get a list of commands."
-            )
+            await ctx.send(COMMAND_NOT_FOUND_RESPONSE)
+        elif isinstance(error, BaseUserError):
+            if error.private:
+                await ctx.author.send(error.message)
+            else:
+                await ctx.send(error.message)
         else:
-            raise error
+            await ctx.send(INTERNAL_ERROR_RESPONSE)
 
 
 class Greetings(Cog):
@@ -60,32 +70,10 @@ class Misc(Cog):
 
     @command(name="8ball")
     async def _8ball(self, ctx, *args):
-        responses = [
-            "It is certain.",
-            "It is decidedly so.",
-            "Without a doubt.",
-            "Yes - definitely.",
-            "You may rely on it.",
-            "As I see it, yes.",
-            "Most likely.",
-            "Outlook good.",
-            "Yes.",
-            "Signs point to yes.",
-            "Reply hazy, try again.",
-            "Ask again later.",
-            "Better not tell you now.",
-            "Cannot predict now.",
-            "Concentrate and ask again.",
-            "Don't count on it.",
-            "My reply is no.",
-            "My sources say no.",
-            "Outlook not so good.",
-            "Very doubtful.",
-        ]
         if args:
-            await ctx.send(random.choice(responses))
+            await ctx.send(random.choice(QUESTION_RESPONSES))
         else:
-            await ctx.send("I need a question!")
+            raise InvalidArgs("I need a question!")
 
     @command(brief="get the bot latency")
     async def ping(self, ctx):
@@ -97,37 +85,22 @@ class Roles(Cog):
         self.bot = bot
         self._last_member = None
 
-    @command(brief="list, add or remove roles")
-    async def roles(self, ctx, role=None):
+    @command(brief="list, add or remove roles", aliases=["role"])
+    async def roles(self, ctx, role_name=None):
         server = ctx.guild
 
         if not server:
-            await ctx.send("You must call this command from a server.")
-            return
+            raise OutOfServer()
 
-        roles = filter(
-            lambda x: not x.is_default() and not x.permissions.administrator,
-            server.roles,
-        )
+        roles = filter_public_roles(server.roles)
 
-        if role:
-            for r in roles:
-                if r.name == role:
-                    if r in ctx.author.roles:
-                        await ctx.author.remove_roles(r)
-                        await ctx.author.send(
-                            f"Removed the role {r.name} at {ctx.guild}"
-                        )
-                    else:
-                        await ctx.author.add_roles(r)
-                        await ctx.author.send(f"Added the role {r.name} at {ctx.guild}")
-                    return
-            await ctx.author.send(f"Didn't find the role {role}")
-
+        if role_name:
+            role = find_role(role_name, roles, raise_exception=True)
+            if role in ctx.author.roles:
+                await ctx.author.remove_roles(role)
+                await ctx.author.send(f"Removed the role {role.name} at {ctx.guild}")
+            else:
+                await ctx.author.add_roles(role)
+                await ctx.author.send(f"Added the role {role.name} at {ctx.guild}")
         else:
-            await ctx.send("Roles:")
-            msg_roles = ""
-            for r in roles:
-                msg_roles += f"- {r.name}\n"
-            msg_roles += "\n Add or remove a role with the command 'roles role_name'"
-            await ctx.send(msg_roles)
+            await ctx.send(list_roles(roles))

@@ -9,7 +9,7 @@ from cogs import BaseCog
 class Members(BaseCog):
     admin = True
 
-    @command()
+    @command(brief="ban member")
     async def ban(self, ctx: Context, member_name: str = None):
         if not ctx.guild:
             raise OutOfServer()
@@ -25,7 +25,7 @@ class Members(BaseCog):
         await member.ban()
         await ctx.send(f"{member.mention} has been banned.")
 
-    @command()
+    @command(brief="unban user")
     async def unban(self, ctx: Context, member_name: str = None):
         if not ctx.guild:
             raise OutOfServer()
@@ -44,7 +44,7 @@ class Members(BaseCog):
         await ctx.guild.unban(member)
         await ctx.send(f"{member.mention} has been banned.")
 
-    @command()
+    @command(brief="create a role")
     async def create_role(self, ctx: Context, role: str = None):
         if not ctx.guild:
             raise OutOfServer()
@@ -53,6 +53,6 @@ class Members(BaseCog):
         if not role:
             raise InvalidArgs("I need a role name!")
 
-        await ctx.guild.create_role(role)
+        await ctx.guild.create_role(name=role)
         await ctx.send(f"Created role {role}")
 

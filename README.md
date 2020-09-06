@@ -10,13 +10,21 @@ Add [R2D2](https://discord.com/api/oauth2/authorize?client_id=751926044960882829
 
 All commands are prefixed with a dot "." <br />
 ```
-Basic: 
-        .help   shows all commands  
-Misc: 
-       .8ball   ask a question
-        .ping   get the bot latency
-Roles: 
-       .roles   list, add or remove roles
+Basic:
+        help   display this help message
+        r2d2   share r2d2 to a server
+      invite   invite url for this server
+         all   mention @everyone
+Misc:
+       8ball   ask a question, get a prediction
+        ping   get the bot latency
+        rand   mention a random member
+Roles:
+       roles   list, add or remove roles
+Members (admin only):
+         ban   ban member
+       unban   unban user
+ create_role   create a role
 ```
 
 ## Deploy your own
@@ -33,5 +41,6 @@ Install requirements.txt ```pip install -r requirements.txt``` <br /><br />
 Add env variables:
 ```
 export BOT_TOKEN=your_discord_bot_token
+export CLIENT_ID=your_discord_app_client_id
 ```
 Run ```python main.py```

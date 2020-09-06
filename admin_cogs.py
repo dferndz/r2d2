@@ -1,4 +1,5 @@
-from discord.ext.commands import Cog, command
+from discord.ext.commands import command
+from discord.ext.commands.context import Context
 
 from exceptions import PermissionDenied, InvalidArgs, OutOfServer
 from tools import find_member
@@ -9,7 +10,7 @@ class Members(BaseCog):
     admin = True
 
     @command()
-    async def ban(self, ctx, member_name=None):
+    async def ban(self, ctx: Context, member_name: str = None):
         if not ctx.guild:
             raise OutOfServer()
 
@@ -25,7 +26,7 @@ class Members(BaseCog):
         await ctx.send(f"{member.mention} has been banned.")
 
     @command()
-    async def unban(self, ctx, member_name=None):
+    async def unban(self, ctx: Context, member_name: str = None):
         if not ctx.guild:
             raise OutOfServer()
 
@@ -42,3 +43,16 @@ class Members(BaseCog):
 
         await ctx.guild.unban(member)
         await ctx.send(f"{member.mention} has been banned.")
+
+    @command()
+    async def create_role(self, ctx: Context, role: str = None):
+        if not ctx.guild:
+            raise OutOfServer()
+        if not ctx.author.guild_permissions.manage_roles:
+            raise PermissionDenied()
+        if not role:
+            raise InvalidArgs("I need a role name!")
+
+        await ctx.guild.create_role(role)
+        await ctx.send(f"Created role {role}")
+

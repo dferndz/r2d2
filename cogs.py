@@ -1,5 +1,10 @@
 import random
+from typing import List
+
 from discord.ext.commands import Cog, command, CommandNotFound
+from discord.ext.commands.context import Context
+from discord.member import Member
+from discord.guild import Guild
 
 from exceptions import (
     BaseUserError,
@@ -41,11 +46,11 @@ class Basic(BaseCog):
             log_msg(message)
 
     @command(aliases=["h"])
-    async def help(self, ctx):
+    async def help(self, ctx: Context):
         await send_help(ctx, self)
 
     @command()
-    async def all(self, ctx):
+    async def all(self, ctx: Context):
         if not ctx.guild:
             raise OutOfServer()
         if not ctx.author.guild_permissions.mention_everyone:
@@ -53,7 +58,7 @@ class Basic(BaseCog):
         await ctx.send(ctx.guild.default_role)
 
     @Cog.listener()
-    async def on_command_error(self, ctx, error):
+    async def on_command_error(self, ctx: Context, error):
         if isinstance(error, CommandNotFound):
             await ctx.send(COMMAND_NOT_FOUND_RESPONSE)
         elif isinstance(error, BaseUserError):
@@ -68,30 +73,41 @@ class Basic(BaseCog):
 
 class Greetings(BaseCog):
     @Cog.listener()
-    async def on_member_join(self, member):
-        print(f"{member} has joined the server.")
+    async def on_member_join(self, member: Member):
+        guild: Guild = member.guild
+        log(f"{str(member)} joined {guild.name}")
+        guild.system_channel.send(f"Say hi to {member.display_name}")
 
     @Cog.listener()
-    async def on_member_remove(self, member):
-        print(f"{member} has left the server.")
+    async def on_member_remove(self, member: Member):
+        guild: Guild = member.guild
+        log(f"{str(member)} left {guild.name}")
 
 
 class Misc(BaseCog):
     @command(name="8ball")
-    async def _8ball(self, ctx, *args):
+    async def _8ball(self, ctx: Context, *args):
         if args:
             await ctx.send(random.choice(QUESTION_RESPONSES))
         else:
             raise InvalidArgs("I need a question!")
 
     @command(brief="get the bot latency")
-    async def ping(self, ctx):
+    async def ping(self, ctx: Context):
         await ctx.send(f"Pong! Latency: {round(self.bot.latency * 1000)} ms")
+
+    @command(name="rand", aliases=["random"], brief="mention a random member")
+    async def random_member(self, ctx: Context):
+        if not ctx.guild:
+            raise OutOfServer()
+        guild: Guild = ctx.guild
+        members: List[Member] = guild.members
+        await ctx.send(random.choice(members).mention)
 
 
 class Roles(BaseCog):
     @command(brief="list, add or remove roles", aliases=["role"])
-    async def roles(self, ctx, role_name=None):
+    async def roles(self, ctx: Context, role_name: str = None):
         server = ctx.guild
 
         if not server:

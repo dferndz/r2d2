@@ -21,6 +21,7 @@ from tools import send_help, mention_admin
 from logger import log, log_msg
 from cogs.base_cog import BaseCog
 from embeds.alert import alert
+from embeds.embed import Embed
 
 
 class Basic(BaseCog):
@@ -35,7 +36,11 @@ class Basic(BaseCog):
     @Cog.listener()
     async def on_message(self, message):
         if self.bot.user in message.mentions:
-            await message.channel.send("Hey there!")
+            await message.channel.send(
+                embed=Embed(
+                    "Hey there!", footer="Use .help to see a list of commands."
+                ).get_embed()
+            )
         if message.author == self.bot.user:
             log("Bot sent response")
         else:

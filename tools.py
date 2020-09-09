@@ -14,6 +14,7 @@ async def send_help(ctx, cog):
                 if c.brief:
                     brief = c.brief
                 message += f"{c.name:>12}   {brief}\n"
+            message += "\n"
     message += "```"
     await ctx.send(message)
 

@@ -19,12 +19,21 @@ Basic:
         r2d2   share r2d2 to a server
       invite   invite url for this server
          all   mention @everyone
+
 Misc:
        8ball   ask a question, get a prediction
         ping   get the bot latency
         rand   mention a random member
+
 Roles:
        roles   list, add or remove roles
+
+Music:
+        play   look up and play music
+       pause   pause music
+        stop   stop music
+  disconnect   disconnect from voice channel
+
 Members (admin only):
          ban   ban member
        unban   unban user

@@ -1,22 +1,18 @@
 from exceptions import InvalidArgs
+from embed import Embed
+from discord.ext.commands.context import Context
 
 
-async def send_help(ctx, cog):
-    message = "```"
+async def send_help(ctx: Context, cog):
+    fields = []
     for name in cog.bot.cogs:
         if cog.bot.cogs[name].get_commands():
-            message += f"{name}"
-            if cog.bot.cogs[name].admin:
-                message += " (admin only)"
-            message += ":\n"
             for c in cog.bot.cogs[name].get_commands():
                 brief = ""
                 if c.brief:
                     brief = c.brief
-                message += f"{c.name:>12}   {brief}\n"
-            message += "\n"
-    message += "```"
-    await ctx.send(message)
+                fields.append((c.name, brief))
+    await ctx.send(embed=Embed("Commands", "Commands are prefixed by a dot '.'", cog.bot.user, fields).get_embed())
 
 
 def filter_public_roles(roles):

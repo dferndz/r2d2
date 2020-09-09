@@ -228,8 +228,12 @@ class Music(BaseCog):
     async def disconnect(self, ctx: Context):
         if not ctx.guild:
             raise OutOfServer()
+
         guild: Guild = ctx.guild
-        client: VoiceClient = guild.voice_client
-        await client.disconnect()
+
+        if guild.id in clients:
+            client: VoiceClient = guild.voice_client
+            del clients[guild.id]
+            await client.disconnect()
 
 

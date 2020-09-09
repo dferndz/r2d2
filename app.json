@@ -21,6 +21,9 @@
   "buildpacks": [
     {
       "url": "heroku/python"
+    },
+    {
+      "url": "https://github.com/kontentcore/heroku-buildpack-ffmpeg"
     }
   ]
 }

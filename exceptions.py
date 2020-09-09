@@ -30,3 +30,9 @@ class PermissionDenied(BaseUserError):
     def __init__(self, message="Permission denied.", **kwargs):
         self.message = message
         super().__init__(self.message, **kwargs)
+
+
+class OutOfVoiceChannel(BaseUserError):
+    def __init__(self, message="You must be in a voice channel.", **kwargs):
+        self.message = message
+        super().__init__(self.message, **kwargs)

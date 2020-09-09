@@ -9,9 +9,9 @@ class Embed:
     def __init__(
         self,
         title: str,
-        description: str,
-        author: User,
-        content: List[tuple],
+        description: str = None,
+        author: User = None,
+        content: List[tuple] = [],
         colour: Colour = Colour.green(),
     ):
         self.author = author
@@ -22,7 +22,9 @@ class Embed:
 
     def get_embed(self):
         embed = D_Embed(title=self.title, colour=self.colour, description=self.description)
-        embed.set_author(name=self.author.display_name, icon_url=self.author.avatar_url)
+
+        if self.author:
+            embed.set_author(name=self.author.display_name, icon_url=self.author.avatar_url)
 
         for name, value in self.content:
             embed.add_field(name=name, value=value, inline=False)

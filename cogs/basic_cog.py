@@ -20,6 +20,7 @@ from exceptions import (
 from tools import send_help, mention_admin
 from logger import log, log_msg
 from cogs.base_cog import BaseCog
+from embeds.alert import alert
 
 
 class Basic(BaseCog):
@@ -83,12 +84,12 @@ class Basic(BaseCog):
     @Cog.listener()
     async def on_command_error(self, ctx: Context, error):
         if isinstance(error, CommandNotFound):
-            await ctx.send(COMMAND_NOT_FOUND_RESPONSE)
+            await ctx.send(embed=alert(COMMAND_NOT_FOUND_RESPONSE).get_embed())
         elif isinstance(error, BaseUserError):
             if error.private:
-                await ctx.author.send(error.message)
+                await ctx.author.send(embed=alert(error.message).get_embed())
             else:
-                await ctx.send(error.message)
+                await ctx.send(embed=alert(error.message).get_embed())
         else:
             log(error)
             await ctx.send(mention_admin(ctx, INTERNAL_ERROR_RESPONSE))

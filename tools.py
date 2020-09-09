@@ -1,5 +1,5 @@
 from exceptions import InvalidArgs
-from embed import Embed
+from embeds.embed import Embed
 from discord.ext.commands.context import Context
 
 
@@ -12,7 +12,7 @@ async def send_help(ctx: Context, cog):
                 if c.brief:
                     brief = c.brief
                 fields.append((c.name, brief))
-    await ctx.send(embed=Embed("Commands", "Commands are prefixed by a dot '.'", cog.bot.user, fields).get_embed())
+    await ctx.send(embed=Embed("Commands", "Commands are prefixed by a dot '.'", content=fields).get_embed())
 
 
 def filter_public_roles(roles):

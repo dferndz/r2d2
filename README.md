@@ -3,7 +3,8 @@
 ![img](https://img.shields.io/badge/code-python-blue?style=for-the-badge&logo=python)
 ![img](https://img.shields.io/badge/code_style-black-black?style=for-the-badge)
 <br /><br />
-R2D2 is a [Discord](https://discord.com/) bot.
+R2D2 is a general purpose [Discord](https://discord.com/) bot. It can manage roles, members, 
+lookup and play youtube music, and more!
 
 ## Usage
 
@@ -46,6 +47,19 @@ Create a discord [application](https://discordpy.readthedocs.io/en/latest/discor
 Create a [heroku](https://heroku.com) account. <br />
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/dferndz/r2d2)
+
+#### Dependencies
+
+This bot uses ffmpeg and opus library. Both must be install for the Music Cog to work. <br />
+Using the Deploy to Heroku button will automatically install both requirements to heroku. <br /><br />
+If necessary, the buildpacks to install such requirements are: <br />
+```
+# ffmpeg
+https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git
+
+# opus
+https://github.com/xrisk/heroku-opus.git
+```
 
 ## Run locally
 

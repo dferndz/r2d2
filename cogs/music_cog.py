@@ -1,11 +1,14 @@
 from youtube_search import YoutubeSearch
 
-from discord.ext.commands import Cog, command, CommandNotFound, Bot
+from discord.ext.commands import command
 from discord.ext.commands.context import Context
 from discord.guild import Guild
 from discord.voice_client import VoiceClient
+from discord.colour import Colour
 from ytdl import YTDLSource
 
+from embeds.embed import Embed
+from embeds.alert import alert
 from cogs.base_cog import BaseCog
 from exceptions import (
     OutOfServer,
@@ -36,13 +39,23 @@ class Music(BaseCog):
         if not query:
             if client.is_paused():
                 client.resume()
+                await ctx.send(embed=alert("▶️ Resumed").get_embed())
                 return
             raise InvalidArgs("Tell me what to play!")
 
+        await ctx.send(embed=alert(f"🔎 Searching for '{query}'").get_embed())
         results = YoutubeSearch(query).to_dict()
         url = f"https://youtube.com{results[0]['url_suffix']}"
+        title = results[0]["title"]
 
         player = await YTDLSource.from_url(url, loop=self.bot.loop)
+
+        if results[0]["thumbnails"]:
+            image = results[0]["thumbnails"][0]
+        else:
+            image = None
+
+        await ctx.send(embed=Embed(f"Now playing {title}", description=url, colour=Colour.red(), image=image).get_embed())
 
         if client.is_playing():
             client.stop()
@@ -63,6 +76,7 @@ class Music(BaseCog):
             client: VoiceClient = clients[guild.id]
             if client.is_playing():
                 client.pause()
+                await ctx.send(embed=alert("⏸ Paused").get_embed())
 
     @command(brief="stop music")
     async def stop(self, ctx: Context):
@@ -76,6 +90,7 @@ class Music(BaseCog):
             client: VoiceClient = clients[guild.id]
             if client.is_paused() or client.is_playing():
                 client.stop()
+                await ctx.send(embed=alert("⏹ Stoped").get_embed())
 
     @command(brief="disconnect from voice channel")
     async def disconnect(self, ctx: Context):
@@ -89,3 +104,4 @@ class Music(BaseCog):
             client: VoiceClient = guild.voice_client
             del clients[guild.id]
             await client.disconnect()
+            await ctx.send(embed=alert("❌ Disconnected").get_embed())

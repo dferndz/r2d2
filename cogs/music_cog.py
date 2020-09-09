@@ -55,7 +55,14 @@ class Music(BaseCog):
         else:
             image = None
 
-        await ctx.send(embed=Embed(f"Now playing {title}", description=url, colour=Colour.red(), image=image).get_embed())
+        await ctx.send(
+            embed=Embed(
+                f"Now playing {title}",
+                description=url,
+                colour=Colour.red(),
+                image=image,
+            ).get_embed()
+        )
 
         if client.is_playing():
             client.stop()

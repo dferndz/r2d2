@@ -12,7 +12,11 @@ async def send_help(ctx: Context, cog):
                 if c.brief:
                     brief = c.brief
                 fields.append((c.name, brief))
-    await ctx.send(embed=Embed("Commands", "Commands are prefixed by a dot '.'", content=fields).get_embed())
+    await ctx.send(
+        embed=Embed(
+            "Commands", "Commands are prefixed by a dot '.'", content=fields
+        ).get_embed()
+    )
 
 
 def filter_public_roles(roles):
@@ -25,7 +29,9 @@ def list_roles(roles):
     msg_roles = ""
     for r in roles:
         msg_roles += f"- {r.name}\n"
-    return Embed("Roles", msg_roles, footer="Add a role with command '.roles role_name'").get_embed()
+    return Embed(
+        "Roles", msg_roles, footer="Add a role with command '.roles role_name'"
+    ).get_embed()
 
 
 def find_role(role, roles, raise_exception=False):

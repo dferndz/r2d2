@@ -25,10 +25,14 @@ class Embed:
         self.image = image
 
     def get_embed(self):
-        embed = D_Embed(title=self.title, colour=self.colour, description=self.description)
+        embed = D_Embed(
+            title=self.title, colour=self.colour, description=self.description
+        )
 
         if self.author:
-            embed.set_author(name=self.author.display_name, icon_url=self.author.avatar_url)
+            embed.set_author(
+                name=self.author.display_name, icon_url=self.author.avatar_url
+            )
 
         if self.image:
             embed.set_image(url=self.image)

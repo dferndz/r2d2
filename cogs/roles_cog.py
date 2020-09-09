@@ -21,9 +21,17 @@ class Roles(BaseCog):
             role = find_role(role_name, roles, raise_exception=True)
             if role in ctx.author.roles:
                 await ctx.author.remove_roles(role)
-                await ctx.author.send(embed=alert(f"Removed the role {role.name} at {ctx.guild}").get_embed())
+                await ctx.author.send(
+                    embed=alert(
+                        f"Removed the role {role.name} at {ctx.guild}"
+                    ).get_embed()
+                )
             else:
                 await ctx.author.add_roles(role)
-                await ctx.author.send(embed=alert(f"Added the role {role.name} at {ctx.guild}").get_embed())
+                await ctx.author.send(
+                    embed=alert(
+                        f"Added the role {role.name} at {ctx.guild}"
+                    ).get_embed()
+                )
         else:
             await ctx.send(embed=list_roles(roles))

@@ -12,6 +12,7 @@ class Embed:
         description: str = None,
         author: User = None,
         content: List[tuple] = [],
+        footer: str = None,
         colour: Colour = Colour.green(),
     ):
         self.author = author
@@ -19,6 +20,7 @@ class Embed:
         self.colour = colour
         self.title = title
         self.description = description
+        self.footer = footer
 
     def get_embed(self):
         embed = D_Embed(title=self.title, colour=self.colour, description=self.description)
@@ -28,5 +30,8 @@ class Embed:
 
         for name, value in self.content:
             embed.add_field(name=name, value=value, inline=False)
+
+        if self.footer:
+            embed.set_footer(text=self.footer)
 
         return embed

@@ -22,11 +22,10 @@ def filter_public_roles(roles):
 
 
 def list_roles(roles):
-    msg_roles = "```Roles:\n"
+    msg_roles = ""
     for r in roles:
         msg_roles += f"- {r.name}\n"
-    msg_roles += "\n Add or remove a role with the command 'roles role_name'```"
-    return msg_roles
+    return Embed("Roles", msg_roles, footer="Add a role with command '.roles role_name'").get_embed()
 
 
 def find_role(role, roles, raise_exception=False):

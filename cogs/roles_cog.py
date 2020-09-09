@@ -4,6 +4,7 @@ from discord.ext.commands.context import Context
 from exceptions import OutOfServer
 from tools import filter_public_roles, list_roles, find_role
 from cogs.base_cog import BaseCog
+from embeds.alert import alert
 
 
 class Roles(BaseCog):
@@ -20,9 +21,9 @@ class Roles(BaseCog):
             role = find_role(role_name, roles, raise_exception=True)
             if role in ctx.author.roles:
                 await ctx.author.remove_roles(role)
-                await ctx.author.send(f"Removed the role {role.name} at {ctx.guild}")
+                await ctx.author.send(embed=alert(f"Removed the role {role.name} at {ctx.guild}").get_embed())
             else:
                 await ctx.author.add_roles(role)
-                await ctx.author.send(f"Added the role {role.name} at {ctx.guild}")
+                await ctx.author.send(embed=alert(f"Added the role {role.name} at {ctx.guild}").get_embed())
         else:
-            await ctx.send(list_roles(roles))
+            await ctx.send(embed=list_roles(roles))

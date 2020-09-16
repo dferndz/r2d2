@@ -1,4 +1,5 @@
 import os
+import traceback
 from typing import List
 
 from discord.ext.commands import Cog, command, CommandNotFound
@@ -96,5 +97,5 @@ class Basic(BaseCog):
             else:
                 await ctx.send(embed=alert(error.message).get_embed())
         else:
-            log(error)
+            log(f"{error} in {traceback.format_exc()}")
             await ctx.send(mention_admin(ctx, INTERNAL_ERROR_RESPONSE))

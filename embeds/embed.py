@@ -38,7 +38,10 @@ class Embed:
             embed.set_image(url=self.image)
 
         for name, value in self.content:
-            embed.add_field(name=name, value=value, inline=False)
+            if value:
+                embed.add_field(name=name, value=value, inline=False)
+            else:
+                embed.add_field(name=name, value=" - ", inline=False)
 
         if self.footer:
             embed.set_footer(text=self.footer)

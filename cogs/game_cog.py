@@ -12,6 +12,7 @@ UP = '⬆️'
 DOWN = '⬇️'
 LEFT = '⬅️'
 RIGHT = '➡️'
+TIMEOUT = 120
 
 
 class Game(BaseCog):
@@ -39,7 +40,7 @@ class Game(BaseCog):
             await ctx.send("Game already started")
         else:
             game = self.init_game()
-            g_message: Message = await ctx.send(str(game.board))
+            g_message: Message = await ctx.send(str(game.board), delete_after=TIMEOUT)
             self.games[g_message.id] = game
             moves = [LEFT, RIGHT, UP, DOWN]
             for m in moves:
@@ -63,9 +64,15 @@ class Game(BaseCog):
                 g.left()
             if g.win():
                 await message.edit(content=str(g.board), embed=alert("VICTORY!").get_embed())
+                await message.clear_reactions()
                 del self.games[message.id]
             else:
-                await message.edit(content=str(g.board))
+                await message.edit(content=str(g.board), delete_after=TIMEOUT)
+
+    @Cog.listener()
+    async def on_message_delete(self, message: Message):
+        if message.id in self.games:
+            del self.games[message.id]
 
     @Cog.listener()
     async def on_reaction_remove(self, reaction: Reaction, user: User):

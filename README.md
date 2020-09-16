@@ -4,7 +4,7 @@
 ![img](https://img.shields.io/badge/code_style-black-black?style=for-the-badge)
 <br /><br />
 R2D2 is a general purpose [Discord](https://discord.com/) bot. It can manage roles, members, 
-lookup and play youtube music, and more!
+lookup and play youtube music, built-in games and more!
 
 ## Usage
 
@@ -29,6 +29,9 @@ Misc:
 Roles:
        roles   list, add or remove roles
 
+Game:
+        game   play a game
+
 Music:
         play   look up and play music
        pause   pause music
@@ -40,6 +43,12 @@ Members (admin only):
        unban   unban user
  create_role   create a role
 ```
+
+#### Game
+
+![R2D2 Game](https://github.com/dferndz/r2d2/blob/master/game.png?raw=true) <br />
+You can now play on Discord with R2D2! Use command ```.game``` <br />
+The goal is to push all boxes to the diamonds.
 
 ## Deploy your own
 

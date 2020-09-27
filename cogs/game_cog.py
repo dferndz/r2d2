@@ -8,10 +8,10 @@ from cogs.base_cog import BaseCog
 from game_engine import Game as GameEngine
 
 
-UP = '⬆️'
-DOWN = '⬇️'
-LEFT = '⬅️'
-RIGHT = '➡️'
+UP = "⬆️"
+DOWN = "⬇️"
+LEFT = "⬅️"
+RIGHT = "➡️"
 TIMEOUT = 120
 
 
@@ -63,7 +63,9 @@ class Game(BaseCog):
             if e == LEFT:
                 g.left()
             if g.win():
-                await message.edit(content=str(g.board), embed=alert("VICTORY!").get_embed())
+                await message.edit(
+                    content=str(g.board), embed=alert("VICTORY!").get_embed()
+                )
                 await message.clear_reactions()
                 del self.games[message.id]
             else:

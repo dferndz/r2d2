@@ -14,15 +14,15 @@ while not game.win():
     print(game.board)
     move = input()
 
-    if move == 'w':
+    if move == "w":
         game.up()
 
-    if move == 's':
+    if move == "s":
         game.down()
 
-    if move == 'a':
+    if move == "a":
         game.left()
 
-    if move == 'd':
+    if move == "d":
         game.right()
 print(game.board)

@@ -4,11 +4,11 @@ from game_engine.board import Board
 
 ROWS = 10
 COLS = 10
-PLAYER_CHAR = '😀'
-WALL_CHAR = '🟥'
-BOX_CHAR = '📦'
-GOAL_CHAR = '💎'
-BLANK_CHAR = '⬛'
+PLAYER_CHAR = "😀"
+WALL_CHAR = "🟥"
+BOX_CHAR = "📦"
+GOAL_CHAR = "💎"
+BLANK_CHAR = "⬛"
 
 
 class Coord:
@@ -77,7 +77,10 @@ class Game:
         new_y = from_y + y
 
         if self.in_range(new_x, new_y):
-            if not self.check_collision(new_x, new_y) or self.board.fetch(new_y, new_x) == GOAL_CHAR:
+            if (
+                not self.check_collision(new_x, new_y)
+                or self.board.fetch(new_y, new_x) == GOAL_CHAR
+            ):
                 c = self.board.fetch(from_y, from_x)
                 self.board.set(from_y, from_x, BLANK_CHAR)
                 self.board.set(new_y, new_x, c)
@@ -111,6 +114,3 @@ class Game:
 
     def right(self):
         self.move(1, 0)
-
-
-
